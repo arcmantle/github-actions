@@ -1,0 +1,5 @@
+name: "pnpm-to-semver"
+description: "Runs in a pnpm workspace, creating an object mapping package names to their semver versions."
+runs:
+  using: node20
+  main: dist/index.js
