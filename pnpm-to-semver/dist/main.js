@@ -16928,6 +16928,7 @@ function pnpmToSemver(projectFilter) {
 	const statePath = path.resolve(process.cwd(), "node_modules", ".pnpm-workspace-state-v1.json");
 	const raw = fs.readFileSync(statePath, "utf8");
 	const data = JSON.parse(raw);
+	console.log("workspace state", data);
 	let projects = Object.entries(data.projects).map(([absPath, meta]) => ({
 		path: absPath,
 		name: meta.name,
@@ -16940,6 +16941,7 @@ function pnpmToSemver(projectFilter) {
 		if (projectFilter.exclude && projectFilter.exclude.includes(project.name)) return false;
 		return true;
 	});
+	console.log("projects", projects);
 	const catalogs = data.settings?.catalogs ?? {};
 	const defaultCatalog = catalogs["default"] ?? {};
 	function resolveWorkspaceSpec(depName, spec) {
