@@ -17012,7 +17012,10 @@ function pnpmToSemver(projectFilter) {
 
 //#endregion
 //#region src/main.ts
-const toList = (value) => value?.split(",").map((s) => s.trim()).filter((s) => s);
+const toList = (value) => {
+	const list = value?.split(",").map((s) => s.trim()).filter((s) => s);
+	return list.length > 0 ? list : void 0;
+};
 try {
 	const include = import_core.getInput("include");
 	const exclude = import_core.getInput("exclude");
