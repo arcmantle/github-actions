@@ -12,4 +12,4 @@ outputs:
     description: "JSON object mapping package names to their resolved semver dependencies"
 runs:
   using: node24
-  main: dist/index.js
+  main: dist/main.js
