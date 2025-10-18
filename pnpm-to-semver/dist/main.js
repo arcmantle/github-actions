@@ -1,3 +1,4 @@
+import * as core from "@actions/core";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -6,17 +7,18 @@ function pnpmToSemver(projectFilter) {
 	const statePath = path.resolve(process.cwd(), "node_modules", ".pnpm-workspace-state-v1.json");
 	const raw = fs.readFileSync(statePath, "utf8");
 	const data = JSON.parse(raw);
-	const projects = Object.entries(data.projects).filter(([, meta]) => {
-		if (projectFilter.include && !projectFilter.include.includes(meta.name)) return false;
-		if (projectFilter.exclude && projectFilter.exclude.includes(meta.name)) return false;
-		return true;
-	}).map(([absPath, meta]) => ({
+	let projects = Object.entries(data.projects).map(([absPath, meta]) => ({
 		path: absPath,
 		name: meta.name,
 		version: meta.version ?? null
 	})).sort((a, b) => a.path.localeCompare(b.path));
 	const nameToVersion = /* @__PURE__ */ new Map();
 	for (const p of projects) if (p.version) nameToVersion.set(p.name, p.version);
+	projects = projects.filter((project) => {
+		if (projectFilter.include && !projectFilter.include.includes(project.name)) return false;
+		if (projectFilter.exclude && projectFilter.exclude.includes(project.name)) return false;
+		return true;
+	});
 	const catalogs = data.settings?.catalogs ?? {};
 	const defaultCatalog = catalogs["default"] ?? {};
 	function resolveWorkspaceSpec(depName, spec) {
@@ -31,8 +33,7 @@ function pnpmToSemver(projectFilter) {
 		return `${op}${base}`;
 	}
 	function resolveCatalogSpec(depName, spec) {
-		const catName = spec.slice(8).trim() || "default";
-		return (catalogs[catName] ?? defaultCatalog)?.[depName] ?? null;
+		return (catalogs[spec.slice(8).trim() || "default"] ?? defaultCatalog)?.[depName] ?? null;
 	}
 	const updates = {};
 	for (const proj of projects) {
@@ -88,11 +89,18 @@ function pnpmToSemver(projectFilter) {
 
 //#endregion
 //#region src/main.ts
-const toList = (envVar) => envVar?.split(",").map((s) => s.trim()).filter((s) => s);
-pnpmToSemver({
-	include: toList(process.env.PNPM_TO_SEMVER_INCLUDE),
-	exclude: toList(process.env.PNPM_TO_SEMVER_EXCLUDE)
-});
+const toList = (value) => value?.split(",").map((s) => s.trim()).filter((s) => s);
+try {
+	const include = core.getInput("include");
+	const exclude = core.getInput("exclude");
+	const semverMap = pnpmToSemver({
+		include: toList(include),
+		exclude: toList(exclude)
+	});
+	core.setOutput("dep-map", semverMap);
+} catch (error) {
+	core.setFailed(error instanceof Error ? error.message : String(error));
+}
 
 //#endregion
 export {  };
