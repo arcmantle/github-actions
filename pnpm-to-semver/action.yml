@@ -1,5 +1,15 @@
 name: "pnpm-to-semver"
 description: "Runs in a pnpm workspace, creating an object mapping package names to their semver versions."
+inputs:
+  include:
+    description: "Comma-separated list of package names to include"
+    required: false
+  exclude:
+    description: "Comma-separated list of package names to exclude"
+    required: false
+outputs:
+  dep-map:
+    description: "JSON object mapping package names to their resolved semver dependencies"
 runs:
-  using: node20
+  using: node24
   main: dist/index.js

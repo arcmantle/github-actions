@@ -4,6 +4,8 @@
 	"description": "description",
 	"type": "module",
 	"main": "dist/main.js",
-	"dependencies": {},
+	"dependencies": {
+		"@actions/core": "^1.11.1"
+	},
 	"authors": "author"
 }
