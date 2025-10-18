@@ -40,6 +40,8 @@ export function pnpmToSemver(
 	const raw = fs.readFileSync(statePath, 'utf8');
 	const data: PNPMWorkspaceState = JSON.parse(raw);
 
+	console.log('workspace state', data);
+
 	// index projects
 	let projects = Object.entries(data.projects)
 		.map(([ absPath, meta ]) => ({ path: absPath, name: meta.name, version: meta.version ?? null }))
@@ -61,6 +63,9 @@ export function pnpmToSemver(
 
 		return true;
 	});
+
+	console.log('projects', projects);
+
 
 	const catalogs = (data.settings?.catalogs ?? {}) as Record<string, Record<string, string>>;
 	const defaultCatalog: Record<string, string> = catalogs['default'] ?? {};
