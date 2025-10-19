@@ -1,0 +1,14 @@
+{
+	"name": "@arcmantle/replace-deps-action",
+	"version": "1.0.0",
+	"private": true,
+	"description": "GitHub Action to update package.json dependencies from a dep-map",
+	"type": "module",
+	"main": "dist/main.js",
+	"scripts": {
+		"build": "tsdown"
+	},
+	"dependencies": {
+		"@actions/core": "^1.11.1"
+	}
+}

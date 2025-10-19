@@ -1,6 +1,7 @@
 packages:
   - pnpm-to-semver
   - detect-changes
+  - replace-deps
 
 publicHoistPattern:
   - "*eslint*"

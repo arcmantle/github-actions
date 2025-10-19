@@ -1,0 +1,24 @@
+name: 'Replace Package Dependencies'
+description: 'Replaces package.json dependencies based on a provided dependency map'
+author: 'arcmantle'
+
+inputs:
+  dep-map:
+    description: >
+      JSON map of dependencies to update
+      format: Record<PackageName, Record<DependencyName, VersionString>>
+    required: true
+  package-path:
+    description: 'Path to package.json file to update'
+    required: false
+    default: 'package.json'
+
+outputs:
+  updated:
+    description: 'Boolean indicating if any dependencies were updated (true/false)'
+  changes:
+    description: 'JSON array of changes made'
+
+runs:
+  using: node24
+  main: dist/main.js

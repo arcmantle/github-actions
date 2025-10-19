@@ -33,6 +33,12 @@ importers:
         specifier: ^1.11.1
         version: 1.11.1
 
+  replace-deps:
+    dependencies:
+      '@actions/core':
+        specifier: ^1.11.1
+        version: 1.11.1
+
 packages:
 
   '@actions/core@1.11.1':
