@@ -34,7 +34,7 @@ export function pnpmToSemver(
 	projectFilter?: {
 		include?: string[];
 		exclude?: string[];
-	}
+	},
 ): string {
 	const statePath = path.resolve(process.cwd(), 'node_modules', '.pnpm-workspace-state-v1.json');
 	const raw = fs.readFileSync(statePath, 'utf8');

@@ -1,0 +1,29 @@
+name: 'Detect Package Changes'
+description: 'Detects which packages have changed based on git diff and config file'
+author: 'arcmantle'
+
+inputs:
+  config-file:
+    description: 'Path to the subtree-sync configuration file'
+    required: false
+    default: '.github/subtree-sync.json'
+  base-ref:
+    description: 'Base commit reference to compare against (e.g., GITHUB_EVENT_BEFORE)'
+    required: false
+    default: ''
+  head-ref:
+    description: 'Head commit reference to compare (e.g., GITHUB_SHA)'
+    required: false
+    default: 'HEAD'
+
+outputs:
+  matrix:
+    description: 'JSON array of changed packages with packagePath and targetRepo'
+  has-changes:
+    description: 'Boolean indicating if any packages have changes (true/false)'
+  changed-files:
+    description: 'Newline-separated list of changed files'
+
+runs:
+  using: node24
+  main: dist/main.js

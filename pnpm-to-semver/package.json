@@ -1,5 +1,5 @@
 {
-	"name": "@arcmantle/pnpm-to-semver",
+	"name": "@arcmantle/pnpm-to-semver-action",
 	"version": "1.0.0",
 	"description": "description",
 	"type": "module",
@@ -9,6 +9,5 @@
 	},
 	"dependencies": {
 		"@actions/core": "^1.11.1"
-	},
-	"authors": "author"
+	}
 }

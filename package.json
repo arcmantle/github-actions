@@ -1,7 +1,11 @@
 {
 	"private": true,
 	"type": "module",
+	"scripts": {
+		"build": "tsdown"
+	},
 	"dependencies": {
+		"@arcmantle/eslint-config": "^1.0.2",
 		"@arcmantle/tsconfig": "^1.0.9",
 		"@types/node": "^24.6.0",
 		"tsdown": "^0.15.5"
