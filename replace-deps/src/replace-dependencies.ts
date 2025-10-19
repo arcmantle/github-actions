@@ -14,7 +14,6 @@ export interface PackageJson {
 	devDependencies?:      Record<string, string>;
 	peerDependencies?:     Record<string, string>;
 	optionalDependencies?: Record<string, string>;
-	[key: string]:         unknown;
 }
 
 export interface DependencyMap {
@@ -59,7 +58,7 @@ export function replaceDependencies(input: UpdateDependenciesInput): UpdateDepen
 	let pkg: PackageJson;
 	try {
 		const content = readFileSync(packageJsonPath, 'utf8');
-		pkg = JSON.parse(content) as PackageJson;
+		pkg = JSON.parse(content);
 	}
 	catch (error) {
 		throw new Error(
@@ -85,7 +84,7 @@ export function replaceDependencies(input: UpdateDependenciesInput): UpdateDepen
 		'devDependencies',
 		'peerDependencies',
 		'optionalDependencies',
-	] as const;
+	] satisfies (keyof PackageJson)[];
 
 	const changes: DependencyChange[] = [];
 
@@ -93,7 +92,7 @@ export function replaceDependencies(input: UpdateDependenciesInput): UpdateDepen
 	for (const [ dep, version ] of Object.entries(pkgDeps)) {
 		// Find which section contains this dependency
 		const sectionWithDep = sections.find(
-			section => pkg[section] && Object.hasOwn(pkg[section] as object, dep),
+			section => pkg[section] && Object.hasOwn(pkg[section], dep),
 		);
 
 		if (!sectionWithDep) {
@@ -101,10 +100,10 @@ export function replaceDependencies(input: UpdateDependenciesInput): UpdateDepen
 			continue;
 		}
 
-		const oldVersion = (pkg[sectionWithDep] as Record<string, string>)[dep];
+		const oldVersion = pkg[sectionWithDep][dep];
 
 		// Update the version
-		(pkg[sectionWithDep] as Record<string, string>)[dep] = version;
+		pkg[sectionWithDep][dep] = version;
 
 		changes.push({
 			dependency: dep,
